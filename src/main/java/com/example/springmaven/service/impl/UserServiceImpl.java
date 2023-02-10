@@ -1,5 +1,6 @@
 package com.example.springmaven.service.impl;
 
+import com.example.springmaven.dto.UserDto;
 import com.example.springmaven.model.User;
 import com.example.springmaven.repository.IUserRepository;
 import com.example.springmaven.service.IUserService;
@@ -7,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -21,8 +20,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void addUser(User user) {
-        userRepository.save(user);
+    public void createUser(UserDto userDto) {
+        userRepository.createUser(userDto.getNameUser(), userDto.getAddressUser(), userDto.getPhoneUser(), userDto.getBirthdayUser());
     }
 
     @Override
@@ -31,9 +30,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public void updateUser(Long id,UserDto userDto) {
+        userRepository.updateUser(userDto.getNameUser(), userDto.getAddressUser(), userDto.getPhoneUser(), userDto.getBirthdayUser(), id);
     }
+
 
     @Override
     public User findByUser(Long id) {

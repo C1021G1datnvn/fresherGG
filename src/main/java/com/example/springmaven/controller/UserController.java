@@ -1,13 +1,19 @@
 package com.example.springmaven.controller;
 
+import com.example.springmaven.dto.UserDto;
 import com.example.springmaven.model.User;
 import com.example.springmaven.service.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -17,17 +23,29 @@ public class UserController {
     @GetMapping("/listUser")
     public ResponseEntity<Page<User>> showListUser(@RequestParam(defaultValue = "0") int page){
         Page<User> users = iuserService.findListUser(PageRequest.of(page, 5));
-        if (users == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }else {
-            return new ResponseEntity<>(users, HttpStatus.OK);
+        if(users.getTotalPages()<=page){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user){
-        iuserService.addUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
+        if (bindingResult.hasFieldErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            });
+            response.put("error", errorMap);
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            iuserService.createUser(userDto);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/findUserId/{id}")
@@ -52,18 +70,18 @@ public class UserController {
     }
 
     @PatchMapping("/editUser/{id}")
-    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user) {
-        User userEdit = iuserService.findByUser(id);
-        if (userEdit == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            userEdit.setNameUser(user.getNameUser());
-            userEdit.setAddressUser(user.getAddressUser());
-            userEdit.setPhoneUser(user.getPhoneUser());
-            userEdit.setBirthdayUser(user.getBirthdayUser());
-            iuserService.updateUser(userEdit);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<?> editUser(@Valid @RequestBody UserDto userDto, @PathVariable Long id, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            });
+            response.put("error", errorMap);
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
+        iuserService.updateUser(id, userDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/searchUser")
