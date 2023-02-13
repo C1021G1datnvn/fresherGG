@@ -22,6 +22,8 @@ public class UserDto implements Validator {
     @Pattern(regexp="^[0-9]*$", message="Vui lòng nhập đúng số điện thoại!")
     private String phoneUser;
     private Date birthdayUser;
+    private Boolean delFlag;
+    private Long typeUser;
 
     public Long getId() {
         return id;
@@ -61,6 +63,22 @@ public class UserDto implements Validator {
 
     public void setBirthdayUser(Date birthdayUser) {
         this.birthdayUser = birthdayUser;
+    }
+
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public Long getTypeUser() {
+        return typeUser;
+    }
+
+    public void setTypeUser(Long typeUser) {
+        this.typeUser = typeUser;
     }
 
     @Override

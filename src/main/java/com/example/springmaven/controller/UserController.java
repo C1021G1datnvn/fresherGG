@@ -1,7 +1,9 @@
 package com.example.springmaven.controller;
 
 import com.example.springmaven.dto.UserDto;
+import com.example.springmaven.model.TypeUser;
 import com.example.springmaven.model.User;
+import com.example.springmaven.service.ITypeUserService;
 import com.example.springmaven.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/")
 public class UserController {
     @Autowired
     private IUserService iuserService;
+
+    @Autowired
+    private ITypeUserService iTypeUserService;
 
     @GetMapping("/listUser")
     public ResponseEntity<Page<User>> showListUser(@RequestParam(defaultValue = "0") int page){
@@ -58,13 +65,24 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable Long id){
+    @DeleteMapping("/softDeleteUser/{id}")
+    public ResponseEntity<User> softDeleteUser(@PathVariable Long id){
         User user = iuserService.findByUser(id);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            iuserService.removeUser(id);
+            iuserService.softRemoveUser(id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/hardDeleteUser/{id}")
+    public ResponseEntity<User> hardDeleteUser(@PathVariable Long id){
+        User user = iuserService.findByUser(id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            iuserService.hardDeleteUser(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
     }
@@ -95,4 +113,21 @@ public class UserController {
         }
     }
 
+    @GetMapping("/list-typeUser")
+    public ResponseEntity<List<TypeUser>> findAllTypeUser() {
+        List<TypeUser> typeUsers = iTypeUserService.findAllTypeUser();
+        if (typeUsers.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(typeUsers,HttpStatus.OK);
+    }
+
+    @GetMapping("/typeUser/{id}")
+    public ResponseEntity<TypeUser> findTypeUserById(@PathVariable Long id) {
+        TypeUser typeUser = iTypeUserService.findTypeUserById(id);
+        if (typeUser == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(typeUser,HttpStatus.OK);
+    }
 }

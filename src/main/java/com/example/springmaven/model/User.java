@@ -1,15 +1,14 @@
 package com.example.springmaven.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +17,12 @@ public class User {
     private String addressUser;
     private String phoneUser;
     private Date birthdayUser;
+    private Boolean delFlag;
+
+    @ManyToOne
+    @JoinColumn(name = "id_type_user", referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private TypeUser typeUser;
 
     public Long getId() {
         return id;
@@ -57,5 +62,21 @@ public class User {
 
     public void setBirthdayUser(Date birthdayUser) {
         this.birthdayUser = birthdayUser;
+    }
+
+    public Boolean isDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public TypeUser getTypeUser() {
+        return typeUser;
+    }
+
+    public void setTypeUser(TypeUser typeUser) {
+        this.typeUser = typeUser;
     }
 }

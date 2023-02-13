@@ -16,22 +16,29 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Page<User> findListUser(Pageable pageable) {
-        return userRepository.findAll(pageable);
+        return userRepository.findAllUser(pageable);
     }
 
     @Override
     public void createUser(UserDto userDto) {
-        userRepository.createUser(userDto.getNameUser(), userDto.getAddressUser(), userDto.getPhoneUser(), userDto.getBirthdayUser());
+        userRepository.createUser(userDto.getNameUser(), userDto.getAddressUser(), userDto.getPhoneUser(), userDto.getBirthdayUser(),
+                userDto.getTypeUser(), true);
     }
 
     @Override
-    public void removeUser(Long id) {
+    public void softRemoveUser(Long id) {
+        userRepository.deleteUserById(id);
+    }
+
+    @Override
+    public void hardDeleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
     @Override
     public void updateUser(Long id,UserDto userDto) {
-        userRepository.updateUser(userDto.getNameUser(), userDto.getAddressUser(), userDto.getPhoneUser(), userDto.getBirthdayUser(), id);
+        userRepository.updateUser(userDto.getNameUser(), userDto.getAddressUser(), userDto.getPhoneUser(), userDto.getBirthdayUser(),
+                true, userDto.getTypeUser(), id);
     }
 
 
