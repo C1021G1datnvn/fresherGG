@@ -9,9 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductDto {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;

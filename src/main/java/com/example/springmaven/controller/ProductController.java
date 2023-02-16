@@ -4,6 +4,7 @@ import com.example.springmaven.dto.ProductDto;
 import com.example.springmaven.mapper.ProductMapper;
 import com.example.springmaven.model.Product;
 import com.example.springmaven.repository.ProductRepository;
+import com.example.springmaven.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductServiceImpl productService;
 
     @PostMapping("/addProduct")
     public ResponseEntity<Product> save(@RequestBody ProductDto productDto) {
@@ -39,26 +43,11 @@ public class ProductController {
 
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable(value = "id") Integer id) {
-       ProductDto productDto = productMapper.modelToDto(productRepository.findById(id).get());
-        if ( productDto == null ) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            productRepository.deleteById(productDto.getId());
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+       return productService.deleteProduct(id);
     }
 
     @PatchMapping("/editProduct/{id}")
     public ResponseEntity<?> editProduct(@PathVariable(value = "id") Integer id, @RequestBody Product product) {
-        ProductDto productDto = productMapper.modelToDto(productRepository.findById(id).get());
-        if ( productDto == null ) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            productDto.setName(product.getName());
-            productDto.setDescription(product.getDescription());
-            productDto.setQuantity(String.valueOf(product.getQuantity()));
-            productDto.setPrice(product.getPrice());
-            return new ResponseEntity<>(productRepository.save(productMapper.dtoToModel(productDto)), HttpStatus.CREATED);
-        }
+        return productService.editProduct(product, id);
     }
 }

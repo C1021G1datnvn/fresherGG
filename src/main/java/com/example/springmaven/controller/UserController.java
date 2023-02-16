@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/")
 public class UserController {
     @Autowired
     private IUserService iuserService;
