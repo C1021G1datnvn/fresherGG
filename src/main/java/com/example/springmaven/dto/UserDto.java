@@ -9,7 +9,6 @@ import java.util.Date;
 public class UserDto implements Validator {
 
     private Long id;
-
     @NotBlank(message = "Không được để trống!")
     @Size(min = 5, max = 50)
     private String nameUser;

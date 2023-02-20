@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/listUser")
     public ResponseEntity<Page<User>> showListUser(@RequestParam(defaultValue = "0") int page){
         Page<User> users = iuserService.findListUser(PageRequest.of(page, 5));
-        if(users.getTotalPages()<=page){
+        if(users.getTotalPages() <= page){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (users.isEmpty()) {
@@ -102,9 +102,9 @@ public class UserController {
     }
 
     @GetMapping("/searchUser")
-    public ResponseEntity<Page<User>> searchUser(@RequestParam String name, @RequestParam String address,
-                                            @RequestParam String phone, @RequestParam(defaultValue = "0") int page) {
-        Page<User> users = iuserService.searchUser(name, address, phone, PageRequest.of(page, 5));
+    public ResponseEntity<Page<User>> searchUser(@RequestParam(defaultValue = "") String name,@RequestParam(defaultValue = "") String address,
+                                            @RequestParam(defaultValue = "") String phone, @RequestParam(defaultValue = "0") int page) {
+        Page<User> users = iuserService.searchUserContaining(name, address, phone, PageRequest.of(page, 5));
         if (users == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -120,6 +120,7 @@ public class UserController {
         }
         return new ResponseEntity<>(typeUsers,HttpStatus.OK);
     }
+
 
     @GetMapping("/typeUser/{id}")
     public ResponseEntity<TypeUser> findTypeUserById(@PathVariable Long id) {

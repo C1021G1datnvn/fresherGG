@@ -11,11 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-@Repository
-@Transactional
+
 public interface IUserRepository extends JpaRepository<User, Long> {
-    Page<User> findUserByNameUserContainingAndAddressUserContainingAndPhoneUserContaining(
-            String name, String address, String phone, Pageable pageable);
 
     @Query(value = "insert into `user` (user.name_user, user.address_user, user.phone_user, user.birthday_user, user.id_type_user, user.del_flag) values(?1, ?2, ?3, ?4, ?5, ?6)", nativeQuery = true)
     @Modifying
@@ -37,4 +34,8 @@ public interface IUserRepository extends JpaRepository<User, Long> {
             "where del_flag = 1",
             nativeQuery = true)
     Page<User> findAllUser(Pageable pageable);
+
+    @Query(value = "select user.id, user.name_user, user.address_user, user.phone_user, user.birthday_user, user.del_flag, user.id_type_user \n" +
+            "from `user` WHERE del_flag = '1' AND user.name_user LIKE %?1% AND user.address_user LIKE %?2% AND user.phone_user LIKE %?3% ", nativeQuery = true)
+    Page<User> searchUserContaining(String name, String address, String phone, Pageable pageable);
 }

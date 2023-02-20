@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
@@ -21,6 +22,7 @@ public class ProductServiceImpl implements IProductService {
     private ProductMapper productMapper;
 
     @Override
+    @Transactional
     public ResponseEntity<?> deleteProduct(Integer id) {
         ProductDto productDto = productMapper.INSTANCE.modelToDto(repository.findById(id).get());
         if (productDto == null) {
@@ -32,6 +34,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> editProduct(@RequestBody Product product, Integer id) {
         ProductDto productDto = productMapper.INSTANCE.modelToDto(repository.findById(id).get());
         if (productDto == null) {

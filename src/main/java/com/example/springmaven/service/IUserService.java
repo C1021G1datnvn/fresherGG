@@ -12,5 +12,5 @@ public interface IUserService {
     void hardDeleteUser(Long id);
     void updateUser(Long id, UserDto userDto);
     User findByUser(Long id);
-    Page<User> searchUser(String name,String address, String phone, Pageable pageable);
+    Page<User> searchUserContaining(String name,String address, String phone, Pageable pageable);
 }
