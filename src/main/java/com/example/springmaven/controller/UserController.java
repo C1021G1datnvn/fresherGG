@@ -64,7 +64,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/softDeleteUser/{id}")
+    @DeleteMapping("/softDelete/{id}")
     public ResponseEntity<User> softDeleteUser(@PathVariable Long id){
         User user = iuserService.findByUser(id);
         if (user == null) {
@@ -75,7 +75,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/hardDeleteUser/{id}")
+    @DeleteMapping("/hardDelete/{id}")
     public ResponseEntity<User> hardDeleteUser(@PathVariable Long id){
         User user = iuserService.findByUser(id);
         if (user == null) {
@@ -102,8 +102,10 @@ public class UserController {
     }
 
     @GetMapping("/searchUser")
-    public ResponseEntity<Page<User>> searchUser(@RequestParam(defaultValue = "") String name,@RequestParam(defaultValue = "") String address,
-                                            @RequestParam(defaultValue = "") String phone, @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<Page<User>> searchUser(@RequestParam(defaultValue = "") String name,
+                                                 @RequestParam(defaultValue = "") String address,
+                                                 @RequestParam(defaultValue = "") String phone,
+                                                 @RequestParam(defaultValue = "0") int page) {
         Page<User> users = iuserService.searchUserContaining(name, address, phone, PageRequest.of(page, 5));
         if (users == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
