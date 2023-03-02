@@ -2,10 +2,13 @@ package com.example.springmaven.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@AllArgsConstructor
 public class User implements Serializable {
 
     @Id

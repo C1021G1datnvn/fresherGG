@@ -8,4 +8,6 @@ public interface ITypeUserService {
     List<TypeUser> findAllTypeUser();
 
     TypeUser findTypeUserById(Long id);
+
+    int findAllTypeUserCount();
 }

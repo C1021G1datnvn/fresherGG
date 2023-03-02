@@ -24,6 +24,7 @@ public class UserController {
     private IUserService iuserService;
 
     @Autowired
+
     private ITypeUserService iTypeUserService;
 
     @GetMapping("/listUser")
@@ -123,7 +124,6 @@ public class UserController {
         return new ResponseEntity<>(typeUsers,HttpStatus.OK);
     }
 
-
     @GetMapping("/typeUser/{id}")
     public ResponseEntity<TypeUser> findTypeUserById(@PathVariable Long id) {
         TypeUser typeUser = iTypeUserService.findTypeUserById(id);
@@ -132,4 +132,5 @@ public class UserController {
         }
         return new ResponseEntity<>(typeUser,HttpStatus.OK);
     }
+
 }

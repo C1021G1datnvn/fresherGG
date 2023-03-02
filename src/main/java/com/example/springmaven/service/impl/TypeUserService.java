@@ -26,4 +26,10 @@ public class TypeUserService implements ITypeUserService {
     public TypeUser findTypeUserById(Long id) {
         return iTypeUser.findTypeUserById(id);
     }
+
+    @Override
+    @Transactional
+    public int findAllTypeUserCount() {
+        return iTypeUser.findAllTypeUser().size();
+    }
 }
