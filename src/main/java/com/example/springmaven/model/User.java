@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@AllArgsConstructor
 public class User implements Serializable {
 
     @Id
